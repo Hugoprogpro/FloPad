@@ -1,0 +1,13 @@
+FloPad
+
+Multiplatform editor for PHP, HTML, CSS with FTP client
+
+dependencies:
+wxWidgets (tested with 2.8.10, ubuntu)
+
+Features:
+find text
+v0.1:
+syntax highlight
+autocomplete
+FTP client
