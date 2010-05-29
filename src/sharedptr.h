@@ -22,7 +22,7 @@ class SharedPtr {
 		SharedPtr(T* src):ref(new int),value(src) {
 			*ref = 1;
 		}
-		SharedPtr(SharedPtr<T>& src):ref(src.ref),value(src.value) {
+		SharedPtr(const SharedPtr<T>& src):ref(src.ref),value(src.value) {
 			++(*ref);
 		}
 		void operator =(T* src) {

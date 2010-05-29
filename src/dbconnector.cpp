@@ -8,7 +8,6 @@ bool DbConnector::query(wxString sql)
 	int rows, cols;
 	char** result;
 	int rc = sqlite3_get_table(db, (const char*)sql.ToAscii(), &result, &rows, &cols, NULL);
-
 	head.clear();
 	data.clear();
 	if ( rc == SQLITE_OK ) {
@@ -25,10 +24,13 @@ bool DbConnector::query(wxString sql)
 }
 
 wxString DbConnector::getString(int row, wxString col) {
-	for(int i = head.size()-1; i >= 0; --i)
-		if(head[i] == col) {
-			return data[row*head.size()+i];
+	if(row < getRowCount()) {
+		for(int i = head.size()-1; i >= 0; --i) {
+			if(head[i] == col) {
+				return data[row*head.size()+i];
+			}
 		}
+	}
 	return wxT("");
 }
 
@@ -67,12 +69,15 @@ int DbConnector::getRowCount()
 
 int DbConnector::getInt(int row, wxString col)
 {
-	for(int i = head.size()-1; i >= 0; --i)
-		if(head[i] == col) {
-			long l;
-			data[row*head.size()+i].ToLong(&l, 0);
-			return l;
+	if(row < getRowCount()) {
+		for(int i = head.size()-1; i >= 0; --i) {
+			if(head[i] == col) {
+				long l;
+				data[row*head.size()+i].ToLong(&l, 0);
+				return l;
+			}
 		}
+	}
 	return 0;
 }
 
@@ -88,3 +93,49 @@ wxString DbConnector::getString(int row, const char* col)
 	return getString(row, c);
 }
 
+
+DbConnector& DbConnector::operator <<(const wxString& str) {
+	internalBuffer += str;
+	return *this;
+}
+
+DbConnector& DbConnector::operator <<(const char* str) {
+	internalBuffer += wxString(str, wxConvUTF8);
+	return *this;
+}
+
+
+DbConnector& DbConnector::operator <<(const Execute& e) {
+	query(internalBuffer);
+	internalBuffer = wxT("");
+	return *this;
+}
+
+DbConnector& DbConnector::operator << (int i) {
+	internalBuffer << i;
+	return *this;
+}
+
+
+void DbConnector::select(const wxString& table, const wxString& key, const wxString& value) {
+	(*this) << "select * from " << table << " where " << key << "= \"" << value << "\"" << Execute();
+}
+
+
+int DbConnector::getSettingInt(const wxString& key) {
+	(*this) << "select * from settings where key = \"" << key << "\"" << Execute();
+	return getInt(0, "value");
+}
+
+wxString DbConnector::getSettingString(const wxString& key) {
+	(*this) << "select * from settings where key = \"" << key << "\"" << Execute();
+	return getString(0, "value");
+}
+
+void DbConnector::updateSettings(const wxString key, const wxString& value) {
+	(*this) << "update settings set value = \"" << value << "\" where key = \"" << key << "\"" << Execute();
+}
+
+void DbConnector::updateSettings(const wxString key, int value) {
+	(*this) << "update settings set value = \"" << value << "\" where key = \"" << key << "\"" << Execute();
+}

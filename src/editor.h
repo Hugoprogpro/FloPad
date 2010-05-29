@@ -10,6 +10,7 @@
 #include "localfiletextctrl.h"
 #include "ftpctrl.h"
 #include "quickfindpanel.h"
+#include "globalsettings.h"
 
 class QuickFindPanel;
 
@@ -19,6 +20,8 @@ enum {
 	COMPLETE_WORD = wxID_HIGHEST,
 	VIEW_FTP,
 	VIEW_LINENUMBERS,
+	VIEW_EOL,
+	VIEW_WHITESPACES,
 	FTP_NEW_ACCOUNT,
 	FTP_REMOVE_ACCOUNT,
 	FTP_EDIT_ACCOUNT,
@@ -31,6 +34,7 @@ enum {
 	FTP_DISCONNECT,
 	VIEWAS_CSS,
 	VIEWAS_HTML,
+	GLOBAL_SETTINGS,
 	LAST_ID
 };
 
@@ -55,12 +59,16 @@ class FloEditor : public wxFrame {
 	void createNewFile();
 	void viewAs(wxString lang);
 	void toggleLineNumbers();
+	void toggleEol();
+	void toggleWhiteSpaces();
 	public:
 		FloEditor();
 		~FloEditor();
+		SharedPtr<DbConnector> getDb();
 		wxAuiNotebook* getNotebook() { return mNotebook; }
 		void addFileTextCtrl(FileTextCtrlBase* ctrl);
 		wxStyledTextCtrl* getSelectedFileTextCtrl();
+		void setTabWidth(int w);
 };
 
 #endif // EDITOR_H

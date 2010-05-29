@@ -48,12 +48,20 @@ void FloEditor::initMenuBar() {
 
 	wxMenu* view = new wxMenu();
 	view->Append(VIEW_FTP, wxT("FTP"));
+	view->AppendSeparator();
 	view->Append(VIEW_LINENUMBERS, wxT("Line numbers"));
+	view->Append(VIEW_EOL, wxT("End of line"));
+	view->Append(VIEW_WHITESPACES, wxT("Whitespaces"));
 	wxMenu* viewAs = new wxMenu();
+	view->AppendSeparator();
 	view->AppendSubMenu(viewAs, wxT("View as"));
 	viewAs->Append(VIEWAS_CSS, wxT("CSS"));
 	viewAs->Append(VIEWAS_HTML, wxT("HTML (+JS, PHP, ...)"));
 	mMenuBar->Append(view, wxT("&View"));
+
+	wxMenu* settings = new wxMenu();
+	settings->Append(GLOBAL_SETTINGS, wxT("Global"));
+	mMenuBar->Append(settings, wxT("Settings"));
 
 	Connect(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, (wxObjectEventFunction)&FloEditor::onPageClose);
 	Connect(COMPLETE_WORD, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(FloEditor::onCompleteWord));
@@ -91,6 +99,22 @@ void FloEditor::onClose(wxCloseEvent& event) {
 	event.Veto();
 }
 
+void FloEditor::toggleEol() {
+	wxStyledTextCtrl* ctrl = getSelectedFileTextCtrl();
+	if(!ctrl)
+		return;
+	ctrl->SetViewEOL(!ctrl->GetViewEOL());
+}
+
+
+void FloEditor::toggleWhiteSpaces() {
+	wxStyledTextCtrl* ctrl = getSelectedFileTextCtrl();
+	if(!ctrl)
+		return;
+	ctrl->SetViewWhiteSpace(ctrl->GetViewWhiteSpace() == 0?1:0);
+}
+
+
 void FloEditor::toggleLineNumbers() {
 	wxStyledTextCtrl* ctrl = getSelectedFileTextCtrl();
 	if(!ctrl)
@@ -107,8 +131,19 @@ void FloEditor::toggleLineNumbers() {
 
 void FloEditor::onMenuSelected(wxCommandEvent& event) {
 	switch(event.GetId()) {
+		case GLOBAL_SETTINGS: {
+			GlobalSettingsDialog* d = new GlobalSettingsDialog(this, this);
+			d->Show();
+			}
+			break;
 		case VIEW_LINENUMBERS:
 			toggleLineNumbers();
+			break;
+		case VIEW_EOL:
+			toggleEol();
+			break;
+		case VIEW_WHITESPACES:
+			toggleWhiteSpaces();
 			break;
 		case VIEWAS_CSS:
 			viewAs(wxT("css"));
@@ -224,8 +259,8 @@ void FloEditor::addFileTextCtrl(FileTextCtrlBase* ctrl)
 	mNotebook->SetSelection(mNotebook->GetPageCount()-1);
 	Connect(wxEVT_STC_SAVEPOINTREACHED, (wxObjectEventFunction)&FloEditor::onSavePointReached);
 	Connect(wxEVT_STC_SAVEPOINTLEFT, (wxObjectEventFunction)&FloEditor::onSavePointLeft);
-	ctrl->SetTabWidth(4);
 	viewAs(ctrl->getExtension());
+	ctrl->SetTabWidth(mDb->getSettingInt(wxT("scintilla.tabwidth")));
 }
 
 
@@ -263,3 +298,18 @@ void FloEditor::viewAs(wxString lang)
 		styleset.apply(ctrl);
 	}
 }
+
+
+SharedPtr<DbConnector> FloEditor::getDb()
+{
+	return mDb;
+}
+
+
+void FloEditor::setTabWidth(int w)
+{
+	for(int i = mNotebook->GetPageCount()-1; i>= 0; --i) {
+		((wxStyledTextCtrl*)mNotebook->GetPage(i))->SetTabWidth(w);
+	}
+}
+
