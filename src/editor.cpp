@@ -47,11 +47,12 @@ void FloEditor::initMenuBar() {
 
 
 	wxMenu* view = new wxMenu();
-	view->Append(VIEW_FTP, wxT("FTP"));
+	view->Append(VIEW_FTP, wxT("FTP\tF9"));
 	view->AppendSeparator();
 	view->Append(VIEW_LINENUMBERS, wxT("Line numbers"));
 	view->Append(VIEW_EOL, wxT("End of line"));
 	view->Append(VIEW_WHITESPACES, wxT("Whitespaces"));
+	view->Append(VIEW_WORDWRAP, wxT("Word wrap"));
 	wxMenu* viewAs = new wxMenu();
 	view->AppendSeparator();
 	view->AppendSubMenu(viewAs, wxT("View as"));
@@ -106,6 +107,13 @@ void FloEditor::toggleEol() {
 	ctrl->SetViewEOL(!ctrl->GetViewEOL());
 }
 
+void FloEditor::toggleWordWrap() {
+	wxStyledTextCtrl* ctrl = getSelectedFileTextCtrl();
+	if(!ctrl)
+		return;
+	ctrl->SetWrapMode(ctrl->GetWrapMode() == 0?1:0);
+}
+
 
 void FloEditor::toggleWhiteSpaces() {
 	wxStyledTextCtrl* ctrl = getSelectedFileTextCtrl();
@@ -135,6 +143,9 @@ void FloEditor::onMenuSelected(wxCommandEvent& event) {
 			GlobalSettingsDialog* d = new GlobalSettingsDialog(this, this);
 			d->Show();
 			}
+			break;
+		case VIEW_WORDWRAP:
+			toggleWordWrap();
 			break;
 		case VIEW_LINENUMBERS:
 			toggleLineNumbers();
@@ -189,7 +200,7 @@ void FloEditor::onMenuSelected(wxCommandEvent& event) {
 			Close(true);
 			break;
 		case VIEW_FTP:
-			mAuiManager->GetPane(mFtp).Show();
+			mAuiManager->GetPane(mFtp).Show(!mAuiManager->GetPane(mFtp).IsShown());
 			mAuiManager->Update();
 			break;
 		case COMPLETE_WORD:

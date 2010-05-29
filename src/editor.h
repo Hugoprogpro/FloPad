@@ -22,6 +22,7 @@ enum {
 	VIEW_LINENUMBERS,
 	VIEW_EOL,
 	VIEW_WHITESPACES,
+	VIEW_WORDWRAP,
 	FTP_NEW_ACCOUNT,
 	FTP_REMOVE_ACCOUNT,
 	FTP_EDIT_ACCOUNT,
@@ -59,6 +60,7 @@ class FloEditor : public wxFrame {
 	void createNewFile();
 	void viewAs(wxString lang);
 	void toggleLineNumbers();
+	void toggleWordWrap();
 	void toggleEol();
 	void toggleWhiteSpaces();
 	public:
