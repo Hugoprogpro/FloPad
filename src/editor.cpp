@@ -48,6 +48,7 @@ void FloEditor::initMenuBar() {
 
 	wxMenu* view = new wxMenu();
 	view->Append(VIEW_FTP, wxT("FTP"));
+	view->Append(VIEW_LINENUMBERS, wxT("Line numbers"));
 	wxMenu* viewAs = new wxMenu();
 	view->AppendSubMenu(viewAs, wxT("View as"));
 	viewAs->Append(VIEWAS_CSS, wxT("CSS"));
@@ -90,8 +91,25 @@ void FloEditor::onClose(wxCloseEvent& event) {
 	event.Veto();
 }
 
+void FloEditor::toggleLineNumbers() {
+	wxStyledTextCtrl* ctrl = getSelectedFileTextCtrl();
+	if(!ctrl)
+		return;
+	if(ctrl->GetMarginType(1) == wxSTC_MARGIN_NUMBER) {
+		ctrl->SetMarginType(1, 0);
+		ctrl->SetMarginWidth(1, ctrl->GetMarginWidth(1)-50);
+	}
+	else {
+		ctrl->SetMarginType(1, wxSTC_MARGIN_NUMBER);
+		ctrl->SetMarginWidth(1, ctrl->GetMarginWidth(1)+50);
+	}
+}
+
 void FloEditor::onMenuSelected(wxCommandEvent& event) {
 	switch(event.GetId()) {
+		case VIEW_LINENUMBERS:
+			toggleLineNumbers();
+			break;
 		case VIEWAS_CSS:
 			viewAs(wxT("css"));
 			break;

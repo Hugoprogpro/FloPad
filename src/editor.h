@@ -18,6 +18,7 @@ class FtpCtrl;
 enum {
 	COMPLETE_WORD = wxID_HIGHEST,
 	VIEW_FTP,
+	VIEW_LINENUMBERS,
 	FTP_NEW_ACCOUNT,
 	FTP_REMOVE_ACCOUNT,
 	FTP_EDIT_ACCOUNT,
@@ -53,6 +54,7 @@ class FloEditor : public wxFrame {
 	void onClose(wxCloseEvent& event);
 	void createNewFile();
 	void viewAs(wxString lang);
+	void toggleLineNumbers();
 	public:
 		FloEditor();
 		~FloEditor();
