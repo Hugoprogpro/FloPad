@@ -25,7 +25,7 @@ void SnippetCtrl::addSnippet()
 	sizer->Add( new wxStaticText( &d, wxID_ANY, wxT("Title"), wxDefaultPosition, wxDefaultSize, 0 ), 0, wxALL | wxALIGN_CENTER_VERTICAL , 3 );
 	sizer->Add( title, 0, wxALL, 3 );
 	
-	wxTextCtrl* value = new wxTextCtrl( &d, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 300,200 ), wxTE_MULTILINE );
+	wxTextCtrl* value = new wxTextCtrl( &d, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 300,200 ), wxTE_MULTILINE | wxTE_PROCESS_TAB);
 	sizer->Add( new wxStaticText( &d, wxID_ANY, wxT("Value"), wxDefaultPosition, wxDefaultSize, 0 ), 0, wxALL | wxALIGN_CENTER_VERTICAL , 3 );
 	sizer->Add( value, 0, wxALL, 3 );
 		
@@ -60,7 +60,7 @@ void SnippetCtrl::editSnippet()
 		wxString oldTitle = mEditor->getDb()->getString(0, "title");
 		title->SetValue(oldTitle);
 		
-		wxTextCtrl* value = new wxTextCtrl( &d, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 300,200 ), wxTE_MULTILINE );
+		wxTextCtrl* value = new wxTextCtrl( &d, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 300,200 ), wxTE_MULTILINE | wxTE_PROCESS_TAB );
 		sizer->Add( new wxStaticText( &d, wxID_ANY, wxT("Value"), wxDefaultPosition, wxDefaultSize, 0 ), 0, wxALL | wxALIGN_CENTER_VERTICAL , 3 );
 		sizer->Add( value, 0, wxALL, 3 );
 		value->SetValue(mEditor->getDb()->getString(0, "value"));
