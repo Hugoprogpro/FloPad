@@ -6,7 +6,9 @@ dependencies:
 wxWidgets (tested with 2.8.10, ubuntu)
 
 Features:
-find text
+code snippets
+find - regular expressions
+find/replace text
 v0.1:
 syntax highlight
 autocomplete

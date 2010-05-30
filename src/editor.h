@@ -9,16 +9,18 @@
 #include "codestyleset.h"
 #include "localfiletextctrl.h"
 #include "ftpctrl.h"
+#include "snippetctrl.h"
 #include "quickfindpanel.h"
 #include "globalsettings.h"
 
 class QuickFindPanel;
 
 class FtpCtrl;
+class SnippetCtrl;
 
 enum {
 	COMPLETE_WORD = wxID_HIGHEST,
-	VIEW_FTP,
+	VIEW_PLUGINS,
 	VIEW_LINENUMBERS,
 	VIEW_EOL,
 	VIEW_WHITESPACES,
@@ -33,6 +35,9 @@ enum {
 	FTP_CREATE_FILE,
 	FTP_REMOVE_FILE,
 	FTP_DISCONNECT,
+	ADD_SNIPPET,
+	REMOVE_SNIPPET,
+	EDIT_SNIPPET,
 	VIEWAS_CSS,
 	VIEWAS_HTML,
 	LAST_ID
@@ -40,15 +45,16 @@ enum {
 
 class FloEditor : public wxFrame {
 	SharedPtr<DbConnector> mDb;
-	wxAuiManager* mAuiManager;
-	wxAuiNotebook* mNotebook;
-	wxAuiNotebook* mLeftNotebook;
-	wxMenuBar* mMenuBar;
-	FtpCtrl* mFtp;
+	wxAuiManager*	mAuiManager;
+	wxAuiNotebook*	mNotebook;
+	wxAuiNotebook*	mLeftNotebook;
+	wxMenuBar*		mMenuBar;
+	FtpCtrl*		mFtp;
+	SnippetCtrl*	mSnippets;
 	QuickFindPanel* mQuickFindPanel;
 	void initNotebook();
 	void initMenuBar();
-	void initFtp();
+	void initPlugins();
 	void onPageClose(wxAuiNotebookEvent& event);
 	void onOpenFile(wxCommandEvent& WXUNUSED(event));
 	void onCompleteWord(wxCommandEvent& WXUNUSED(event));

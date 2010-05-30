@@ -33,8 +33,8 @@ class FtpCtrl : public wxPanel {
 	ViewMode mViewMode;
 	SharedPtr<DbConnector> mDb;
 	bool mFtpBusy;
-	void OnFtpEvent(FtpEvent& event);
-	void OnDClick(wxListEvent& event);
+	void onFtpEvent(FtpEvent& event);
+	void onDClick(wxListEvent& event);
 	void onRightClick(wxListEvent& event);
 	void onMenuSelected(wxCommandEvent& event);
 	void connect(wxString);

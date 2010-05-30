@@ -6,7 +6,7 @@ FloEditor::FloEditor():wxFrame(NULL, -1, wxT("Editor"), wxDefaultPosition, wxSiz
 	mDb->open(wxT("data/feditor.sql"));
 	initNotebook();
 	initMenuBar();
-	initFtp();
+	initPlugins();
 }
 
 
@@ -14,9 +14,11 @@ FloEditor::~FloEditor()
 {
 }
 
-void FloEditor::initFtp() {
+void FloEditor::initPlugins() {
 	mFtp = new FtpCtrl(this, mDb);
 	mLeftNotebook->AddPage(mFtp, wxT("FTP"));
+	mSnippets = new SnippetCtrl(this, this);
+	mLeftNotebook->AddPage(mSnippets, wxT("Snippets"));
 }
 
 void FloEditor::initMenuBar() {
@@ -47,7 +49,7 @@ void FloEditor::initMenuBar() {
 
 
 	wxMenu* view = new wxMenu();
-	view->Append(VIEW_FTP, wxT("FTP\tF9"));
+	view->Append(VIEW_PLUGINS, wxT("Plugins pane\tF9"));
 	view->AppendSeparator();
 	view->Append(VIEW_LINENUMBERS, wxT("Line numbers"));
 	view->Append(VIEW_EOL, wxT("End of line"));
@@ -195,7 +197,7 @@ void FloEditor::onMenuSelected(wxCommandEvent& event) {
 		case wxID_EXIT: 
 			Close(true);
 			break;
-		case VIEW_FTP:
+		case VIEW_PLUGINS:
 			mAuiManager->GetPane(mLeftNotebook).Show(!mAuiManager->GetPane(mLeftNotebook).IsShown());
 			mAuiManager->Update();
 			break;
@@ -216,7 +218,7 @@ void FloEditor::initNotebook() {
 	sizer->Show(mQuickFindPanel, false);
 
 	mLeftNotebook = new wxAuiNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 
-			wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_SCROLL_BUTTONS);
+			wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_TAB_SPLIT);
 
 	mAuiManager = new wxAuiManager(this);
 	mAuiManager->AddPane(panel, wxCENTER);
