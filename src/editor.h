@@ -38,6 +38,7 @@ enum {
 	ADD_SNIPPET,
 	REMOVE_SNIPPET,
 	EDIT_SNIPPET,
+	INSERT_SNIPPET,
 	VIEWAS_CSS,
 	VIEWAS_HTML,
 	LAST_ID
@@ -62,6 +63,7 @@ class FloEditor : public wxFrame {
 	void onSavePointReached(wxStyledTextEvent& event);
 	void onSavePointLeft(wxStyledTextEvent& event);
 	void onMenuSelected(wxCommandEvent& event);
+	void onSnippetAutoComp(wxStyledTextEvent& event);
 	void onClose(wxCloseEvent& event);
 	void createNewFile();
 	void viewAs(wxString lang);

@@ -6,6 +6,9 @@
 
 class FloEditor;
 
+void showSnippetAutoComp(FloEditor* editor);
+void snippetAutoCompComplete(FloEditor* editor, wxStyledTextEvent& event);
+
 class SnippetCtrl : public wxPanel {
 	FloEditor* mEditor;
 	wxListView* mList;

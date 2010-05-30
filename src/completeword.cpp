@@ -37,12 +37,7 @@ void showTags(wxStyledTextCtrl* ctrl, SharedPtr<DbConnector> db, const wxString 
 				s += ',';
 			s += db->getString(i, "tag");
 		}
-		ctrl->AutoCompSetSeparator(',');
-		ctrl->AutoCompSetIgnoreCase(true);
 		ctrl->AutoCompShow(tag.size(), s);
-		if(db->getRowCount() == 1) {
-			ctrl->AutoCompComplete();
-		}
 	}
 }
 
@@ -57,12 +52,7 @@ void showAttributes(wxStyledTextCtrl* ctrl, SharedPtr<DbConnector> db, const wxS
 				s += ',';
 			s += db->getString(i, "attr");
 		}
-		ctrl->AutoCompSetSeparator(',');
-		ctrl->AutoCompSetIgnoreCase(true);
 		ctrl->AutoCompShow(attr.size(), s);
-		if(db->getRowCount() == 1) {
-			ctrl->AutoCompComplete();
-		}
 	}
 }
 
@@ -89,12 +79,7 @@ void showValues(wxStyledTextCtrl* ctrl, SharedPtr<DbConnector> db, const wxStrin
 				s += ',';
 			s += db->getString(i, "value");
 		}
-		ctrl->AutoCompSetSeparator(',');
-		ctrl->AutoCompSetIgnoreCase(true);
 		ctrl->AutoCompShow(value.size(), s);
-		if(db->getRowCount() == 1) {
-			ctrl->AutoCompComplete();
-		}
 	}
 }
 
@@ -109,12 +94,7 @@ void showEntities(wxStyledTextCtrl* ctrl, SharedPtr<DbConnector> db, const wxStr
 				s += ',';
 			s += db->getString(i, "entity");
 		}
-		ctrl->AutoCompSetSeparator(',');
-		ctrl->AutoCompSetIgnoreCase(true);
 		ctrl->AutoCompShow(ent.size(), s);
-		if(db->getRowCount() == 1) {
-			ctrl->AutoCompComplete();
-		}
 	}
 }
 
@@ -129,12 +109,7 @@ void showPhpFunctions(wxStyledTextCtrl* ctrl, SharedPtr<DbConnector> db, const w
 				s += ',';
 			s += db->getString(i, "function");
 		}
-		ctrl->AutoCompSetSeparator(',');
-		ctrl->AutoCompSetIgnoreCase(true);
 		ctrl->AutoCompShow(foo.size(), s);
-		if(db->getRowCount() == 1) {
-			ctrl->AutoCompComplete();
-		}
 	}
 }
 
@@ -149,12 +124,7 @@ void showCssProperties(wxStyledTextCtrl* ctrl, SharedPtr<DbConnector> db, const 
 				s += ',';
 			s += db->getString(i, "property");
 		}
-		ctrl->AutoCompSetSeparator(',');
-		ctrl->AutoCompSetIgnoreCase(true);
 		ctrl->AutoCompShow(property.size(), s);
-		if(db->getRowCount() == 1) {
-			ctrl->AutoCompComplete();
-		}
 	}
 }
 
@@ -207,6 +177,44 @@ void FloEditor::onCompleteWord(wxCommandEvent& WXUNUSED(event)) {
 					++quoteCount;
 			}
 			++it;
+		}
+	}
+}
+
+void snippetAutoCompComplete(FloEditor* editor, wxStyledTextEvent& event) {
+	(*editor->getDb()) << "select * from snippets where title = \"" << event.GetText() << "\"" << DbConnector::Execute();
+	wxStyledTextCtrl* ctrl = editor->getSelectedFileTextCtrl();
+	if(ctrl) {
+		ctrl->ReplaceTarget(editor->getDb()->getString(0, "value"));
+	}
+}
+
+void showSnippetAutoComp(FloEditor* editor)
+{
+	wxStyledTextCtrl* ctrl = editor->getSelectedFileTextCtrl();
+	if(ctrl) {
+		wxString title;
+		int pos = ctrl->GetCurrentPos();
+		wxString text;
+		if(pos > 20) 
+			text = ctrl->GetTextRange(pos-20, pos);
+		else
+			text = ctrl->GetTextRange(0, pos);
+		title = getWord(text.rbegin(), text.rend());
+		(*editor->getDb()) << "select * from snippets where title like \"" << title << "%\"" << DbConnector::Execute();
+		wxString list;
+		for(int i = 0; i < editor->getDb()->getRowCount(); ++i) {
+			if(i != 0)
+				list += wxT(",");
+			list += editor->getDb()->getString(i, "title");
+		}
+		if(list != wxT("")) {
+			ctrl->SetTargetEnd(pos);
+			ctrl->SetTargetStart(pos-title.length());
+			ctrl->UserListShow(1, list);
+			if(editor->getDb()->getRowCount() == 1) {
+				ctrl->AutoCompComplete();
+			}
 		}
 	}
 }

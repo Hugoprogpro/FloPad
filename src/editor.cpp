@@ -39,6 +39,7 @@ void FloEditor::initMenuBar() {
 	edit->Append(wxID_PASTE, wxT("Paste\tCtrl-v"));
 	edit->AppendSeparator();
 	edit->Append(COMPLETE_WORD, wxT("Complete word\tCtrl-space"));
+	edit->Append(INSERT_SNIPPET, wxT("Insert snippet\tCtrl-b"));
 	edit->AppendSeparator();
 	edit->Append(wxID_PREFERENCES, wxT("Preferences"));
 	mMenuBar->Append(edit, wxT("&Edit"));
@@ -66,6 +67,7 @@ void FloEditor::initMenuBar() {
 	Connect(COMPLETE_WORD, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(FloEditor::onCompleteWord));
 	Connect(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(FloEditor::onMenuSelected));
 	Connect(wxEVT_CLOSE_WINDOW, (wxObjectEventFunction)&FloEditor::onClose);
+	Connect(wxEVT_STC_USERLISTSELECTION, (wxObjectEventFunction)&FloEditor::onSnippetAutoComp);
 	SetMenuBar(mMenuBar);
 }
 
@@ -141,6 +143,9 @@ void FloEditor::onMenuSelected(wxCommandEvent& event) {
 			GlobalSettingsDialog* d = new GlobalSettingsDialog(this, this);
 			d->Show();
 			}
+			break;
+		case INSERT_SNIPPET:
+			showSnippetAutoComp(this);
 			break;
 		case VIEW_WORDWRAP:
 			toggleWordWrap();
@@ -276,6 +281,9 @@ void FloEditor::addFileTextCtrl(FileTextCtrlBase* ctrl)
 	Connect(wxEVT_STC_SAVEPOINTLEFT, (wxObjectEventFunction)&FloEditor::onSavePointLeft);
 	viewAs(ctrl->getExtension());
 	ctrl->SetTabWidth(mDb->getSettingInt(wxT("scintilla.tabwidth")));
+	ctrl->AutoCompSetSeparator(',');
+	ctrl->AutoCompSetIgnoreCase(true);
+	ctrl->AutoCompSetChooseSingle(true);
 }
 
 
@@ -327,4 +335,11 @@ void FloEditor::setTabWidth(int w)
 		((wxStyledTextCtrl*)mNotebook->GetPage(i))->SetTabWidth(w);
 	}
 }
+
+
+void FloEditor::onSnippetAutoComp(wxStyledTextEvent& event)
+{
+	snippetAutoCompComplete(this, event);
+}
+
 
