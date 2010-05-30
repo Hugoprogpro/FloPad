@@ -6,15 +6,16 @@
 #include <wx/listbase.h>
 #include <wx/msgdlg.h>
 #include <wx/thread.h>
-#include "dbconnector.h"
-#include "sharedptr.h"
-#include "asyncftp.h"
 #include <wx/sizer.h>
 #include <wx/button.h>
-#include "ftpfiletextctrl.h"
-#include "editor.h"
 #include <wx/imaglist.h>
+#include "../dbconnector.h"
+#include "../sharedptr.h"
+#include "../editor.h"
+#include "asyncftp.h"
+#include "ftpfiletextctrl.h"
 #include "ftpdialogs.h"
+
 
 class FloEditor;
 

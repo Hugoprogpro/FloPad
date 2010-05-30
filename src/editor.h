@@ -8,7 +8,7 @@
 #include <wx/menu.h>
 #include "codestyleset.h"
 #include "localfiletextctrl.h"
-#include "ftpctrl.h"
+#include "ftp/ftpctrl.h"
 #include "snippetctrl.h"
 #include "quickfindpanel.h"
 #include "globalsettings.h"

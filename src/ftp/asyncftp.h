@@ -1,9 +1,10 @@
 #ifndef ASYNCFTP_H
 #define ASYNCFTP_H
 
-#include "ftp/ftp.h"
-#include "sharedptr.h"
 #include <wx/wx.h>
+#include "ftp.h"
+#include "../sharedptr.h"
+
 
 class FtpThread;
 

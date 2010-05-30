@@ -1,9 +1,9 @@
 #ifndef FTPFILETEXTCTRL_H
 #define FTPFILETEXTCTRL_H
 
-#include "filetextctrlbase.h"
-#include "sharedptr.h"
 #include "asyncftp.h"
+#include "../filetextctrlbase.h"
+#include "../sharedptr.h"
 #include <wx/filename.h>
 
 
