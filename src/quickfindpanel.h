@@ -13,6 +13,7 @@ class QuickFindPanel : public wxToolBar{
 	wxTextCtrl*		mReplaceCtrl;
 	wxCheckBox*		mRegExp;
 	FloEditor*		mEditor;
+	bool			mLastSuccess;
 	void onClose(wxCommandEvent& WXUNUSED(event));
 	void onFind(wxCommandEvent& WXUNUSED(event));
 	void onReplace(wxCommandEvent& event);

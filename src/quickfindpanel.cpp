@@ -1,6 +1,6 @@
 #include "quickfindpanel.h"
 
-QuickFindPanel::QuickFindPanel(wxWindow* parent, FloEditor* editor):wxToolBar(parent, wxID_ANY),mEditor(editor)
+QuickFindPanel::QuickFindPanel(wxWindow* parent, FloEditor* editor):wxToolBar(parent, wxID_ANY),mEditor(editor),mLastSuccess(false)
 {
 	AddTool(wxID_CLOSE, wxT("cancel"), wxBitmap(wxT("data/cancel.png")), wxT("close"), wxITEM_NORMAL);
 	AddControl(new wxStaticText(this, wxID_ANY, wxT("find:")));
@@ -42,14 +42,18 @@ QuickFindPanel::~QuickFindPanel()
 
 void QuickFindPanel::onReplace(wxCommandEvent& event)
 {
-	
 	wxStyledTextCtrl* ctrl = mEditor->getSelectedFileTextCtrl();
 	if(mSearchCtrl->GetValue() != wxT("")) {
-		if(ctrl->GetSelectedText() != mSearchCtrl->GetValue()) {
+		if(!mLastSuccess) {
 			onFind(event);
 		}
 		else {
-			ctrl->ReplaceSelection(mReplaceCtrl->GetValue());
+			if(mRegExp->IsChecked()) {
+				ctrl->ReplaceTargetRE(mReplaceCtrl->GetValue());
+			}
+			else {
+				ctrl->ReplaceTarget(mReplaceCtrl->GetValue());
+			}
 			onFind(event);
 		}
 	}
@@ -73,7 +77,8 @@ void QuickFindPanel::onFind(wxCommandEvent& WXUNUSED(event))
 		ctrl->SetSearchFlags(0);
 	int pos = ctrl->SearchInTarget(mSearchCtrl->GetValue());
 	if(pos!= -1) {
-		ctrl->SetSelection(pos, pos+mSearchCtrl->GetValue().Length());
+		mLastSuccess = true;
+		ctrl->SetSelection(ctrl->GetTargetStart(), ctrl->GetTargetEnd());
 		ctrl->EnsureCaretVisible();
 		mSearchCtrl->SetBackgroundColour(*wxWHITE);
 	}
@@ -82,11 +87,13 @@ void QuickFindPanel::onFind(wxCommandEvent& WXUNUSED(event))
 		ctrl->SetTargetStart(0);
 		pos = ctrl->SearchInTarget( mSearchCtrl->GetValue());
 		if(pos!= -1) {
-			ctrl->SetSelection(pos, pos+mSearchCtrl->GetValue().Length());
+			mLastSuccess = true;
+			ctrl->SetSelection(ctrl->GetTargetStart(), ctrl->GetTargetEnd());
 			ctrl->EnsureCaretVisible();
 			mSearchCtrl->SetBackgroundColour(*wxWHITE);
 		}
 		else {
+			mLastSuccess = false;
 			mSearchCtrl->SetBackgroundColour(wxColour(220, 150, 150));
 		}
 	}
@@ -94,6 +101,7 @@ void QuickFindPanel::onFind(wxCommandEvent& WXUNUSED(event))
 
 void QuickFindPanel::onClose(wxCommandEvent& WXUNUSED(event))
 {
+	mLastSuccess = false;
 	this->GetParent()->GetSizer()->Show(this, false);
 	this->GetParent()->GetSizer()->Layout();
 }
