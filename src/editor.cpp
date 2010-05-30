@@ -16,9 +16,7 @@ FloEditor::~FloEditor()
 
 void FloEditor::initFtp() {
 	mFtp = new FtpCtrl(this, mDb);
-	mAuiManager->AddPane(mFtp, wxLEFT, wxT("FTP"));
-	mAuiManager->GetPane(mFtp).BestSize(200, 200);
-	mAuiManager->Update();
+	mLeftNotebook->AddPage(mFtp, wxT("FTP"));
 }
 
 void FloEditor::initMenuBar() {
@@ -39,6 +37,8 @@ void FloEditor::initMenuBar() {
 	edit->Append(wxID_PASTE, wxT("Paste\tCtrl-v"));
 	edit->AppendSeparator();
 	edit->Append(COMPLETE_WORD, wxT("Complete word\tCtrl-space"));
+	edit->AppendSeparator();
+	edit->Append(wxID_PREFERENCES, wxT("Preferences"));
 	mMenuBar->Append(edit, wxT("&Edit"));
 
 	wxMenu* search = new wxMenu();
@@ -59,10 +59,6 @@ void FloEditor::initMenuBar() {
 	viewAs->Append(VIEWAS_CSS, wxT("CSS"));
 	viewAs->Append(VIEWAS_HTML, wxT("HTML (+JS, PHP, ...)"));
 	mMenuBar->Append(view, wxT("&View"));
-
-	wxMenu* settings = new wxMenu();
-	settings->Append(GLOBAL_SETTINGS, wxT("Global"));
-	mMenuBar->Append(settings, wxT("Settings"));
 
 	Connect(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, (wxObjectEventFunction)&FloEditor::onPageClose);
 	Connect(COMPLETE_WORD, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(FloEditor::onCompleteWord));
@@ -139,7 +135,7 @@ void FloEditor::toggleLineNumbers() {
 
 void FloEditor::onMenuSelected(wxCommandEvent& event) {
 	switch(event.GetId()) {
-		case GLOBAL_SETTINGS: {
+		case wxID_PREFERENCES: {
 			GlobalSettingsDialog* d = new GlobalSettingsDialog(this, this);
 			d->Show();
 			}
@@ -200,7 +196,7 @@ void FloEditor::onMenuSelected(wxCommandEvent& event) {
 			Close(true);
 			break;
 		case VIEW_FTP:
-			mAuiManager->GetPane(mFtp).Show(!mAuiManager->GetPane(mFtp).IsShown());
+			mAuiManager->GetPane(mLeftNotebook).Show(!mAuiManager->GetPane(mLeftNotebook).IsShown());
 			mAuiManager->Update();
 			break;
 		case COMPLETE_WORD:
@@ -218,11 +214,17 @@ void FloEditor::initNotebook() {
 	sizer->Add(mQuickFindPanel, 0, wxGROW | wxEXPAND);
 	panel->SetSizerAndFit(sizer);
 	sizer->Show(mQuickFindPanel, false);
-	
+
+	mLeftNotebook = new wxAuiNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 
+			wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_SCROLL_BUTTONS);
+
 	mAuiManager = new wxAuiManager(this);
 	mAuiManager->AddPane(panel, wxCENTER);
+	mAuiManager->AddPane(mLeftNotebook, wxLEFT, wxT("Plugins"));
+	mAuiManager->GetPane(mLeftNotebook).BestSize(200, 200);
 	mAuiManager->Update();
 	createNewFile();
+	
 }
 
 void FloEditor::onSavePointLeft(wxStyledTextEvent& event) {

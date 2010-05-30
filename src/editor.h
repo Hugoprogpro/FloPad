@@ -35,7 +35,6 @@ enum {
 	FTP_DISCONNECT,
 	VIEWAS_CSS,
 	VIEWAS_HTML,
-	GLOBAL_SETTINGS,
 	LAST_ID
 };
 
@@ -43,6 +42,7 @@ class FloEditor : public wxFrame {
 	SharedPtr<DbConnector> mDb;
 	wxAuiManager* mAuiManager;
 	wxAuiNotebook* mNotebook;
+	wxAuiNotebook* mLeftNotebook;
 	wxMenuBar* mMenuBar;
 	FtpCtrl* mFtp;
 	QuickFindPanel* mQuickFindPanel;
