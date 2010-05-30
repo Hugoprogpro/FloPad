@@ -185,7 +185,17 @@ void snippetAutoCompComplete(FloEditor* editor, wxStyledTextEvent& event) {
 	(*editor->getDb()) << "select * from snippets where title = \"" << event.GetText() << "\"" << DbConnector::Execute();
 	wxStyledTextCtrl* ctrl = editor->getSelectedFileTextCtrl();
 	if(ctrl) {
-		ctrl->ReplaceTarget(editor->getDb()->getString(0, "value"));
+		wxString value = editor->getDb()->getString(0, "value");
+		int pos = value.Find(wxT("{$}"));
+		if(pos != wxNOT_FOUND) {
+			value.Replace(wxT("{$}"), wxT(""), false);
+		}
+		ctrl->ReplaceTarget(value);
+		if(pos != wxNOT_FOUND) {
+			pos = ctrl->GetCurrentPos() + pos;
+			ctrl->SetCurrentPos(pos);
+			ctrl->SetSelection(pos, pos);
+		}
 	}
 }
 
