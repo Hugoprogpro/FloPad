@@ -139,3 +139,10 @@ void DbConnector::updateSettings(const wxString key, const wxString& value) {
 void DbConnector::updateSettings(const wxString key, int value) {
 	(*this) << "update settings set value = \"" << value << "\" where key = \"" << key << "\"" << Execute();
 }
+
+wxString DbConnector::escape(const wxString& str)
+{
+	wxString s = str;
+	s.Replace(wxT("\""),wxT("\"\""), true);
+	return s;
+}

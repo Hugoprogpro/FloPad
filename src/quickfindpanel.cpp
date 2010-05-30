@@ -90,7 +90,6 @@ void QuickFindPanel::onFind(wxCommandEvent& WXUNUSED(event))
 			mSearchCtrl->SetBackgroundColour(wxColour(220, 150, 150));
 		}
 	}
-	std::cout.flush();
 }
 
 void QuickFindPanel::onClose(wxCommandEvent& WXUNUSED(event))

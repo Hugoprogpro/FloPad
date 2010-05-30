@@ -38,6 +38,8 @@ class DbConnector
 		DbConnector& operator <<(const wxString& str);
 		DbConnector& operator <<(const Execute& e);
 		DbConnector& operator <<(int i);
+		static wxString escape(const wxString& str);
+		sqlite3* getSqlite3Object() { return db; }
 };
 
 
