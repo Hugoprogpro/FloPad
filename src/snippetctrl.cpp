@@ -121,10 +121,20 @@ void SnippetCtrl::onRightClick(wxListEvent& event) {
 void SnippetCtrl::onDClick(wxListEvent& event) {
 	wxStyledTextCtrl* ctrl = mEditor->getSelectedFileTextCtrl();
 	if(ctrl) {
-		SharedPtr<DbConnector> db = mEditor->getDb();
-		db->select(wxT("snippets"), wxT("title"), event.GetText());
-		if(db->getRowCount() > 0) {
-			ctrl->InsertText(ctrl->GetCurrentPos(), db->getString(0, "value"));
+		mEditor->getDb()->select(wxT("snippets"), wxT("title"), event.GetText());
+		if(mEditor->getDb()->getRowCount() > 0) {
+			wxString value = mEditor->getDb()->getString(0, "value");
+			int pos = value.Find(wxT("{$}"));
+			if(pos != wxNOT_FOUND) {
+				value.Replace(wxT("{$}"), wxT(""), false);
+			}
+			ctrl->InsertText(ctrl->GetCurrentPos(), value);
+			if(pos != wxNOT_FOUND) {
+				pos = ctrl->GetCurrentPos() + pos;
+				ctrl->SetSelection(pos, pos);
+				ctrl->SetCurrentPos(pos);
+				ctrl->SetFocus();
+			}
 		}
 	}
 }
