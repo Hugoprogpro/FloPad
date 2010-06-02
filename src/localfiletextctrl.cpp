@@ -35,7 +35,7 @@ bool LocalFileTextCtrl::saveFile()
 		FILE* fp = fopen(mFilename.GetFullPath().ToAscii(), "w");
 		if(!fp)
 			return false;
-		fputs(GetText().ToAscii(), fp);
+		fputs(GetText().mb_str(wxConvUTF8), fp);
 		fclose(fp);
 		return true;
 	}
