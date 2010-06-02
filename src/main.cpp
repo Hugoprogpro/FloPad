@@ -5,6 +5,7 @@
 #include "src/ftp/ftp.h"
 
 
+
 class wxMiniApp : public wxApp
 {
 public:

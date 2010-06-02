@@ -151,7 +151,7 @@ wxThread::ExitCode FtpThread::Entry()
 			break;
 		case PUT: {
 			FtpEvent event(FtpEvent::PUT);
-			if(mFtp->put((const char*)mFileName.To8BitData(), (const char*)mFileContent.To8BitData(),mFileContent.size()))
+			if(mFtp->put((const char*)mFileName.To8BitData(), mFileContent.mb_str(wxConvUTF8),mFileContent.size()))
 				mEventHandler->AddPendingEvent(event);
 			else
 				sendErrorEvent(PUT);

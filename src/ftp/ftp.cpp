@@ -343,6 +343,10 @@ bool Ftp::get(const char* filename, std::string& content)
 	return false;
 }
 
+bool Ftp::put(const char* filename, const wchar_t* data, size_t size)
+{
+	return put(filename, (const char*)data, sizeof(wchar_t)*size);
+}
 
 bool Ftp::put(const char* filename, const char* data, size_t size)
 {

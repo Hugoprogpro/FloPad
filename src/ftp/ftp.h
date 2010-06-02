@@ -61,6 +61,7 @@ class Ftp {
 		bool pwd(std::string& dirname);
 		bool get(const char* filename, std::string& content);
 		bool put(const char* filename, const char* data, size_t size);
+		bool put(const char* filename, const wchar_t* data, size_t size);
 		bool nlist(StringList& list);
 		bool list(FileList& list);
 		bool close();
