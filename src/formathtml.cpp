@@ -3,14 +3,6 @@
 bool isSpace(wxChar c) {
 	return c == ' ' || c == '\t' || c == '\n';
 }
-/*
- *	1. ak je string pokracujeme dokonca stringu bez zmien
- *	2. ak je '<'
- * 		2.1. ak je dalsie '/', zmensi indent
- * 		2.2 zisti ci je <.../>, ak ano, nemen indent
- * 	3. kolabuj viac whitespacov do jedneho
- *	4. bez zmeny
- * */
 
 void formatHtml(wxStyledTextCtrl* ctrl) {
 	wxString in = ctrl->GetText();
@@ -23,6 +15,10 @@ void formatHtml(wxStyledTextCtrl* ctrl) {
 	bool emptyElement = true;
 	wxString::iterator i = in.begin();
 	wxString::iterator end = in.end();
+	if(i != end && *i == '<') { // first char in document is also start of an element
+		out += *i; // do not indent
+		++i;
+	}
 	while(i != end) {
 		if(!isSpace(*i))
 			prevSpace = false;
@@ -99,7 +95,7 @@ void formatHtml(wxStyledTextCtrl* ctrl) {
 				return;
 			}
 			else {
-				if(*i == '>') { // koniec neparoveho tagu />
+				if(*i == '>') { // end of <tag .../>
 					--indent;
 				}
 				out += '/';
@@ -107,7 +103,7 @@ void formatHtml(wxStyledTextCtrl* ctrl) {
 			}
 		}
 		else if(isSpace(*i)) {
-			if(!prevSpace) {
+			if(!prevSpace) { // output only one whitespace if there is more in a row
 				out += ' ';
 				prevSpace = true;
 			}
