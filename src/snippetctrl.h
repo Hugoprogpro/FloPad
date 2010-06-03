@@ -6,6 +6,8 @@
 
 class FloEditor;
 
+wxString getWord(wxString::reverse_iterator it, wxString::reverse_iterator rend); //completeword.cpp
+wxString getWord(wxString::iterator it, wxString::iterator end); //completeword.cpp
 void showSnippetAutoComp(FloEditor* editor);
 void snippetAutoCompComplete(FloEditor* editor, wxStyledTextEvent& event);
 

@@ -117,6 +117,46 @@ void SnippetCtrl::onRightClick(wxListEvent& event) {
 	mList->PopupMenu(menu, event.GetPoint());
 }
 
+wxString getIndentString(wxStyledTextCtrl* ctrl) {
+	int pos = ctrl->GetCurrentPos();
+	wxString text;
+	if(pos > 100) 
+		text = ctrl->GetTextRange(pos-100, pos);
+	else
+		text = ctrl->GetTextRange(0, pos);
+	int indent = 0;
+	wxString::reverse_iterator i = text.rbegin(), end = text.rend();
+	while(i != end && *i != '\n') {
+		++i;
+	}
+	if(i != end) {
+		wxString::iterator i2 = i.base(), e2 = text.end();
+		while(i2 != e2 && *i2 == '\t') {
+			++i2;
+			++indent;
+		}
+	}
+	wxString ret;
+	for(int i = 0; i < indent; ++i) {
+		ret += '\t';
+	}
+	return ret;
+}
+
+void insertSnippet(wxStyledTextCtrl* ctrl, wxString& value) {
+	wxString indent = getIndentString(ctrl);
+	value.Replace(wxT("\n"), wxString(wxT("\n"))+indent, true);
+	int pos = value.Find(wxT("{$}"));
+	if(pos != wxNOT_FOUND) {
+		value.Replace(wxT("{$}"), wxT(""), false);
+	}
+	ctrl->ReplaceTarget(value);
+	if(pos != wxNOT_FOUND) {
+		pos = ctrl->GetCurrentPos() + pos;
+		ctrl->SetCurrentPos(pos);
+		ctrl->SetSelection(pos, pos);
+	}
+}
 
 void SnippetCtrl::onDClick(wxListEvent& event) {
 	wxStyledTextCtrl* ctrl = mEditor->getSelectedFileTextCtrl();
@@ -124,17 +164,8 @@ void SnippetCtrl::onDClick(wxListEvent& event) {
 		mEditor->getDb()->select(wxT("snippets"), wxT("title"), event.GetText());
 		if(mEditor->getDb()->getRowCount() > 0) {
 			wxString value = mEditor->getDb()->getString(0, "value");
-			int pos = value.Find(wxT("{$}"));
-			if(pos != wxNOT_FOUND) {
-				value.Replace(wxT("{$}"), wxT(""), false);
-			}
-			ctrl->InsertText(ctrl->GetCurrentPos(), value);
-			if(pos != wxNOT_FOUND) {
-				pos = ctrl->GetCurrentPos() + pos;
-				ctrl->SetSelection(pos, pos);
-				ctrl->SetCurrentPos(pos);
-				ctrl->SetFocus();
-			}
+			insertSnippet(ctrl, value);
+			ctrl->SetFocus();
 		}
 	}
 }
@@ -153,3 +184,41 @@ void SnippetCtrl::populate() {
 
 
 
+void snippetAutoCompComplete(FloEditor* editor, wxStyledTextEvent& event) {
+	(*editor->getDb()) << "select * from snippets where title = \"" << event.GetText() << "\"" << DbConnector::Execute();
+	wxStyledTextCtrl* ctrl = editor->getSelectedFileTextCtrl();
+	if(ctrl) {
+		wxString value = editor->getDb()->getString(0, "value");
+		insertSnippet(ctrl, value);
+	}
+}
+
+void showSnippetAutoComp(FloEditor* editor)
+{
+	wxStyledTextCtrl* ctrl = editor->getSelectedFileTextCtrl();
+	if(ctrl) {
+		wxString title;
+		int pos = ctrl->GetCurrentPos();
+		wxString text;
+		if(pos > 20) 
+			text = ctrl->GetTextRange(pos-20, pos);
+		else
+			text = ctrl->GetTextRange(0, pos);
+		title = getWord(text.rbegin(), text.rend());
+		(*editor->getDb()) << "select * from snippets where title like \"" << title << "%\"" << DbConnector::Execute();
+		wxString list;
+		for(int i = 0; i < editor->getDb()->getRowCount(); ++i) {
+			if(i != 0)
+				list += wxT(",");
+			list += editor->getDb()->getString(i, "title");
+		}
+		if(list != wxT("")) {
+			ctrl->SetTargetEnd(pos);
+			ctrl->SetTargetStart(pos-title.length());
+			ctrl->UserListShow(1, list);
+			if(editor->getDb()->getRowCount() == 1) {
+				ctrl->AutoCompComplete();
+			}
+		}
+	}
+}
