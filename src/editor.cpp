@@ -48,7 +48,6 @@ void FloEditor::initMenuBar() {
 	search->Append(wxID_FIND, wxT("Find\tCtrl-f"));
 	mMenuBar->Append(search, wxT("&Search"));
 
-
 	wxMenu* view = new wxMenu();
 	view->Append(VIEW_PLUGINS, wxT("Plugins pane\tF9"));
 	view->AppendSeparator();
@@ -62,6 +61,10 @@ void FloEditor::initMenuBar() {
 	viewAs->Append(VIEWAS_CSS, wxT("CSS"));
 	viewAs->Append(VIEWAS_HTML, wxT("HTML (+JS, PHP, ...)"));
 	mMenuBar->Append(view, wxT("&View"));
+
+	wxMenu* tools = new wxMenu();
+	tools->Append(FORMAT_HTML, wxT("Indent HTML"));
+	mMenuBar->Append(tools, wxT("&Tools"));
 
 	Connect(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, (wxObjectEventFunction)&FloEditor::onPageClose);
 	Connect(COMPLETE_WORD, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(FloEditor::onCompleteWord));
@@ -139,6 +142,10 @@ void FloEditor::toggleLineNumbers() {
 
 void FloEditor::onMenuSelected(wxCommandEvent& event) {
 	switch(event.GetId()) {
+		case FORMAT_HTML:
+			if(getSelectedFileTextCtrl())
+				formatHtml(getSelectedFileTextCtrl());
+			break;
 		case wxID_PREFERENCES: {
 			GlobalSettingsDialog* d = new GlobalSettingsDialog(this, this);
 			d->Show();

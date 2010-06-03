@@ -12,6 +12,7 @@
 #include "snippetctrl.h"
 #include "quickfindpanel.h"
 #include "globalsettings.h"
+#include "tools.h"
 
 class QuickFindPanel;
 
@@ -41,6 +42,7 @@ enum {
 	INSERT_SNIPPET,
 	VIEWAS_CSS,
 	VIEWAS_HTML,
+	FORMAT_HTML,
 	LAST_ID
 };
 
