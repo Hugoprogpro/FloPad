@@ -56,6 +56,7 @@ void FloEditor::initMenuBar() {
 	view->AppendSubMenu(viewAs, wxT("View as"));
 	viewAs->Append(VIEWAS_CSS, wxT("CSS"));
 	viewAs->Append(VIEWAS_HTML, wxT("HTML (+JS, PHP, ...)"));
+	viewAs->Append(VIEWAS_JS, wxT("JavaScript"));
 	view->Check(VIEW_LINENUMBERS, true);
 	mMenuBar->Append(view, wxT("&View"));
 	
@@ -169,6 +170,9 @@ void FloEditor::onMenuSelected(wxCommandEvent& event) {
 			break;
 		case VIEWAS_CSS:
 			viewAs(wxT("css"));
+			break;
+		case VIEWAS_JS:
+			viewAs(wxT("js"));
 			break;
 		case VIEWAS_HTML:
 			viewAs(wxT("html"));
