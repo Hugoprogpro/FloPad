@@ -31,15 +31,15 @@ void FloEditor::initMenuBar() {
 	mMenuBar->Append(file, wxT("&File"));
 
 	wxMenu* edit = new wxMenu();
-	edit->Append(wxID_UNDO, wxT("Undo\tCtrl-z"));
-	edit->Append(wxID_REDO, wxT("Redo\tCtrl-y"));
+	edit->Append(wxID_UNDO, wxT("Undo\tCtrl-Z"));
+	edit->Append(wxID_REDO, wxT("Redo\tCtrl-Y"));
 	edit->AppendSeparator();
-	edit->Append(wxID_CUT, wxT("Cut\tCtrl-x"));
-	edit->Append(wxID_COPY, wxT("Copy\tCtrl-c"));
-	edit->Append(wxID_PASTE, wxT("Paste\tCtrl-v"));
+	edit->Append(wxID_CUT, wxT("Cut\tCtrl-X"));
+	edit->Append(wxID_COPY, wxT("Copy\tCtrl-C"));
+	edit->Append(wxID_PASTE, wxT("Paste\tCtrl-V"));
 	edit->AppendSeparator();
 	edit->Append(COMPLETE_WORD, wxT("Complete word\tCtrl-space"));
-	edit->Append(INSERT_SNIPPET, wxT("Insert snippet\tCtrl-b"));
+	edit->Append(INSERT_SNIPPET, wxT("Insert snippet\tCtrl-B"));
 	edit->AppendSeparator();
 	edit->Append(wxID_PREFERENCES, wxT("Preferences"));
 	mMenuBar->Append(edit, wxT("&Edit"));
@@ -61,11 +61,11 @@ void FloEditor::initMenuBar() {
 	mMenuBar->Append(view, wxT("&View"));
 	
 	wxMenu* search = new wxMenu();
-	search->Append(wxID_FIND, wxT("Find\tCtrl-f"));
+	search->Append(wxID_FIND, wxT("Find\tCtrl-F"));
 	mMenuBar->Append(search, wxT("&Search"));
 
 	wxMenu* tools = new wxMenu();
-	tools->Append(FORMAT_HTML, wxT("Indent HTML"));
+	tools->Append(FORMAT_HTML, wxT("Indent HTML\tCtrl-I"));
 	mMenuBar->Append(tools, wxT("&Tools"));
 
 	Connect(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, (wxObjectEventFunction)&FloEditor::onPageClose);

@@ -73,8 +73,8 @@ void SnippetCtrl::editSnippet()
 		d.Fit();
 		d.Layout();
 		if(d.ShowModal() == wxID_OK){
-			(*mEditor->getDb()) << "update snippets set title = \"" << DbConnector::escape(title->GetValue()) << "\", value = \"" 
-				<< value->GetValue() << "\" where title = \"" << oldTitle << "\"" << DbConnector::Execute();
+			(*mEditor->getDb()) << "update snippets set title = \"" << title->GetValue() << "\", value = \"" 
+				<< DbConnector::escape(value->GetValue()) << "\" where title = \"" << oldTitle << "\"" << DbConnector::Execute();
 			populate();
 		}
 	}
