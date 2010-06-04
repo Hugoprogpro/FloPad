@@ -67,6 +67,7 @@ class FloEditor : public wxFrame {
 	void onSavePointLeft(wxStyledTextEvent& event);
 	void onMenuSelected(wxCommandEvent& event);
 	void onSnippetAutoComp(wxStyledTextEvent& event);
+	void onTabChanged(wxNotebookEvent& event);
 	void onClose(wxCloseEvent& event);
 	void createNewFile();
 	void viewAs(wxString lang);

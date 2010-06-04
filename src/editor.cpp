@@ -243,7 +243,8 @@ void FloEditor::initNotebook() {
 	mAuiManager->GetPane(mLeftNotebook).BestSize(200, 200);
 	mAuiManager->Update();
 	createNewFile();
-	
+
+	Connect(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, (wxObjectEventFunction)&FloEditor::onTabChanged);
 }
 
 void FloEditor::onSavePointLeft(wxStyledTextEvent& event) {
@@ -355,3 +356,14 @@ void FloEditor::onSnippetAutoComp(wxStyledTextEvent& event)
 }
 
 
+void FloEditor::onTabChanged(wxNotebookEvent& event)
+{
+	wxStyledTextCtrl* ctrl = getSelectedFileTextCtrl();
+	if(ctrl) {
+		wxMenu* view = mMenuBar->GetMenu(mMenuBar->FindMenu(wxT("View")));
+		view->Check(VIEW_LINENUMBERS, ctrl->GetMarginType(1) == wxSTC_MARGIN_NUMBER);
+		view->Check(VIEW_EOL, ctrl->GetViewEOL());
+		view->Check(VIEW_WORDWRAP, ctrl->GetWrapMode());
+		view->Check(VIEW_WHITESPACES, ctrl->GetViewWhiteSpace());
+	}
+}
