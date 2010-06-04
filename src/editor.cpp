@@ -44,23 +44,24 @@ void FloEditor::initMenuBar() {
 	edit->Append(wxID_PREFERENCES, wxT("Preferences"));
 	mMenuBar->Append(edit, wxT("&Edit"));
 
-	wxMenu* search = new wxMenu();
-	search->Append(wxID_FIND, wxT("Find\tCtrl-f"));
-	mMenuBar->Append(search, wxT("&Search"));
-
 	wxMenu* view = new wxMenu();
 	view->Append(VIEW_PLUGINS, wxT("Plugins pane\tF9"));
 	view->AppendSeparator();
-	view->Append(VIEW_LINENUMBERS, wxT("Line numbers"));
-	view->Append(VIEW_EOL, wxT("End of line"));
-	view->Append(VIEW_WHITESPACES, wxT("Whitespaces"));
-	view->Append(VIEW_WORDWRAP, wxT("Word wrap"));
+	view->AppendCheckItem(VIEW_LINENUMBERS, wxT("Line numbers"));
+	view->AppendCheckItem(VIEW_EOL, wxT("End of line"));
+	view->AppendCheckItem(VIEW_WHITESPACES, wxT("Whitespaces"));
+	view->AppendCheckItem(VIEW_WORDWRAP, wxT("Word wrap"));
 	wxMenu* viewAs = new wxMenu();
 	view->AppendSeparator();
 	view->AppendSubMenu(viewAs, wxT("View as"));
 	viewAs->Append(VIEWAS_CSS, wxT("CSS"));
 	viewAs->Append(VIEWAS_HTML, wxT("HTML (+JS, PHP, ...)"));
+	view->Check(VIEW_LINENUMBERS, true);
 	mMenuBar->Append(view, wxT("&View"));
+	
+	wxMenu* search = new wxMenu();
+	search->Append(wxID_FIND, wxT("Find\tCtrl-f"));
+	mMenuBar->Append(search, wxT("&Search"));
 
 	wxMenu* tools = new wxMenu();
 	tools->Append(FORMAT_HTML, wxT("Indent HTML"));
