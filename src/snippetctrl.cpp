@@ -72,7 +72,7 @@ void SnippetCtrl::editSnippet()
 		d.SetSizer( sizer );
 		d.Fit();
 		d.Layout();
-		if(d.ShowModal() == wxID_OK){
+		if(d.ShowModal() == wxID_OK) {
 			(*mEditor->getDb()) << "update snippets set title = \"" << title->GetValue() << "\", value = \"" 
 				<< DbConnector::escape(value->GetValue()) << "\" where title = \"" << oldTitle << "\"" << DbConnector::Execute();
 			populate();
@@ -164,6 +164,8 @@ void SnippetCtrl::onDClick(wxListEvent& event) {
 		mEditor->getDb()->select(wxT("snippets"), wxT("title"), event.GetText());
 		if(mEditor->getDb()->getRowCount() > 0) {
 			wxString value = mEditor->getDb()->getString(0, "value");
+			ctrl->SetTargetStart(ctrl->GetCurrentPos());
+			ctrl->SetTargetEnd(ctrl->GetCurrentPos());
 			insertSnippet(ctrl, value);
 			ctrl->SetFocus();
 		}
