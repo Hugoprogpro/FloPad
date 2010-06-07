@@ -2,7 +2,6 @@
 
 Socket::Socket()
 {
-	mConnected = false;
 }
 
 Socket::~Socket()
@@ -12,83 +11,48 @@ Socket::~Socket()
 
 void Socket::close()
 {
-	if(mConnected) {
-		::close(mSocket);
-		mConnected = false;
-	}
+	mSocket.Close();
 }
 
 bool Socket::isClosed()
 {
-	return !mConnected;
+	return !mSocket.IsConnected();
 }
 
 bool Socket::connect(const char* host, int port)
 {
-	sockaddr_in serv_addr;
-	hostent* server;
-
-	mSocket = socket(AF_INET, SOCK_STREAM, 0);
-	if (mSocket < 0)
-		return false;
-	server = gethostbyname(host);
-	if (server == 0) {
-		return false;
-	}
-	memset(&serv_addr, 0, sizeof(serv_addr));
-	serv_addr.sin_family = AF_INET;
-	bcopy((char *)server->h_addr,
-	      (char *)&serv_addr.sin_addr.s_addr,
-	      server->h_length);
-	serv_addr.sin_port = htons(port);
-	if (::connect(mSocket, (sockaddr *)&serv_addr,sizeof(serv_addr)) < 0) {
-		return false;
-	}
-	mConnected = true;
+	wxIPV4address addr;
+	addr.Service(port);
+	addr.Hostname(wxString(host, wxConvUTF8));
+	mSocket.Connect(addr);
 	return true;
 }
 
 
 bool Socket::recvData(std::string& data)
 {
-	if(mConnected) {
-		char buffer[256] = {'\0'};
-		int n = read(mSocket, buffer, 255);
-		if (n < 0)
-			return false;
-		if (n == 0) {
-			close();
-		}
-		buffer[n] = '\0';
-		data = buffer;
-		return true;
-	}
-	return false;
+	char buffer[256] = "";
+	mSocket.Read(buffer, 255);
+	data = buffer;
+	return true;
 }
 
 bool Socket::sendData(const char* data, size_t size)
 {
-	if(mConnected)
-		return write(mSocket, data, size) >= 0;
-	return false;
+	mSocket.Write(data, size);
+	return true;
 }
 
-bool Socket::sendData(const std::string& data) const
+bool Socket::sendData(const std::string& data)
 {
-	if(mConnected)
-		return write(mSocket, data.c_str(), data.size()) >= 0;
-	return false;
+	mSocket.Write(data.c_str(), data.size());
+	return true;
 }
 
 
 bool Socket::setTimeout(int sec, int usec)
 {
-	if(mConnected) {
-		timeval t;
-		t.tv_sec = sec;
-		t.tv_usec = usec;
-		setsockopt(mSocket, SOL_SOCKET, SO_RCVTIMEO, (void*)&t, sizeof(t));
-	}
+	mSocket.SetTimeout(sec);
 }
 
 Ftp::Ftp():mConnected(false) {

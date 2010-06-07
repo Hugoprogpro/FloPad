@@ -3,6 +3,7 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <wx/socket.h>
 #include <netinet/in.h>
 #include <netdb.h> 
 #include <cstdio>
@@ -14,13 +15,13 @@
 
 
 class Socket {
-int mSocket;
-bool mConnected;
+wxSocketClient mSocket;
+//bool mConnected;
 public:
 	Socket();
 	~Socket();
 	bool connect(const char* host, int port);
-	bool sendData(const std::string& data) const;
+	bool sendData(const std::string& data);
 	bool sendData(const char* data, size_t size);
 	bool recvData(std::string& data);
 	bool setTimeout(int sec, int usec);

@@ -271,7 +271,7 @@ void FloEditor::onOpenFile(wxCommandEvent& WXUNUSED(event)) {
 		addFileTextCtrl(sc);
 	}
 	else
-		delete sc;
+		mNotebook->RemoveChild(sc);
 }
 
 void FloEditor::onSave(wxCommandEvent& WXUNUSED(event))
