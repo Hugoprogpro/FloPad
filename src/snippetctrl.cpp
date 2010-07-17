@@ -17,7 +17,7 @@ SnippetCtrl::~SnippetCtrl() {
 
 void SnippetCtrl::addSnippet()
 {
-	wxDialog d(NULL, wxID_ANY, wxT("Add Snippet"));
+	wxDialog d(NULL, wxID_ANY, (wxString)wxT("Add Snippet"));
 	
 	wxFlexGridSizer* sizer;
 	sizer = new wxFlexGridSizer(2);
@@ -50,7 +50,7 @@ void SnippetCtrl::editSnippet()
 	item.SetId(mList->GetFirstSelected());
 	if(mList->GetItem(item)) {
 		(*mEditor->getDb()) << "select * from snippets where title = \"" << item.GetText() << "\"" << DbConnector::Execute();
-		wxDialog d(NULL, wxID_ANY, wxT("Edit Snippet"));
+		wxDialog d(NULL, wxID_ANY, (wxString)wxT("Edit Snippet"));
 		
 		wxFlexGridSizer* sizer;
 		sizer = new wxFlexGridSizer(2);

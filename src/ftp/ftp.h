@@ -1,11 +1,7 @@
 #ifndef FTP_H
 #define FTP_H
 
-#include <sys/types.h>
-#include <sys/socket.h>
 #include <wx/socket.h>
-#include <netinet/in.h>
-#include <netdb.h> 
 #include <cstdio>
 #include <cstring>
 #include <string>

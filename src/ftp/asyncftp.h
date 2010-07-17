@@ -32,7 +32,7 @@ struct FtpEvent : public wxEvent {
 		RMDIR,
 		RMFILE,
 		CLOSE,
-		ERROR,
+		FE_ERROR,
 		LAST_EVENT
 	};
 	Ftp::FileList fileList;

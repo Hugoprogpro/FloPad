@@ -1,6 +1,6 @@
 #include "globalsettings.h"
 
-GlobalSettingsDialog::GlobalSettingsDialog(wxWindow* parent, FloEditor* editor):wxDialog(parent, wxID_ANY, wxT("Global settings")),mEditor(editor)
+GlobalSettingsDialog::GlobalSettingsDialog(wxWindow* parent, FloEditor* editor):wxDialog(parent, wxID_ANY, (wxString)wxT("Global settings")),mEditor(editor)
 {
 	wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 	mNotebook = new wxNotebook(this, wxID_ANY);

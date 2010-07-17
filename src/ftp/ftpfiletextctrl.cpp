@@ -7,7 +7,7 @@ FtpFileTextCtrl::FtpFileTextCtrl(wxWindow* parent):FileTextCtrlBase(parent)
 
 void FtpFileTextCtrl::onFtpEvent(FtpEvent& event) {
 	switch(event.type) {
-		case FtpEvent::ERROR:
+		case FtpEvent::FE_ERROR:
 			wxLogError(wxT("FTP error"));
 		case FtpEvent::GET:
 			SetText(wxString(event.str.c_str(),wxConvUTF8));

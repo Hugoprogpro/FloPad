@@ -3,7 +3,7 @@
 
 void addNewFtpAccount(SharedPtr<DbConnector> db)
 {
-	wxDialog d(NULL, wxID_ANY, wxT("Add FTP server"));
+	wxDialog d(NULL, wxID_ANY, (wxString)wxT("Add FTP server"));
 	//d.SetSize(300,140);
 	//d.SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -46,7 +46,7 @@ void editFtpAccount(SharedPtr<DbConnector> db, wxString account)
 	db->query(wxT("select * from ftpaccounts where title = \"")+account+wxT("\""));
 	if(db->getRowCount() <= 0)
 		return;
-	wxDialog d(NULL, wxID_ANY, wxT("Add FTP server"));
+	wxDialog d(NULL, wxID_ANY, (wxString)wxT("Add FTP server"));
 	wxFlexGridSizer* sizer;
 	sizer = new wxFlexGridSizer(2);
 	wxTextCtrl* title = new wxTextCtrl( &d, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 150,-1 ), 0 ); 

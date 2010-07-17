@@ -194,7 +194,7 @@ void FtpCtrl::showAccounts() {
 
 void FtpCtrl::onFtpEvent(FtpEvent& event) {
 	switch(event.type) {
-	case FtpEvent::ERROR: {
+	case FtpEvent::FE_ERROR: {
 		wxLogError(wxT("FTP error"));
 		showAccounts();
 	}

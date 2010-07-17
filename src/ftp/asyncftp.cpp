@@ -65,7 +65,7 @@ void FtpThread::reconnect() {
 
 
 void FtpThread::sendErrorEvent(int errorCode) {
-	FtpEvent event(FtpEvent::ERROR);
+	FtpEvent event(FtpEvent::FE_ERROR);
 	event.errorCode = errorCode;
 	mEventHandler->AddPendingEvent(event);
 }
