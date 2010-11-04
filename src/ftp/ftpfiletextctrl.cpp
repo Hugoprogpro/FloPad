@@ -32,7 +32,7 @@ bool FtpFileTextCtrl::saveFile()
 }
 
 
-bool FtpFileTextCtrl::open(SharedPtr<AsyncFtp>& ftp, wxString filename)
+void FtpFileTextCtrl::open(SharedPtr<AsyncFtp>& ftp, wxString filename)
 {
 	mFtp = ftp;
 	mFileName = filename;

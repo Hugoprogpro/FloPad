@@ -16,13 +16,13 @@ class SharedPtr {
 		}
 	}
 	public:
-		SharedPtr():ref(new int),value(0) {
+		SharedPtr():value(0),ref(new int) {
 			*ref = 1;
 		}
-		SharedPtr(T* src):ref(new int),value(src) {
+		SharedPtr(T* src):value(src),ref(new int) {
 			*ref = 1;
 		}
-		SharedPtr(const SharedPtr<T>& src):ref(src.ref),value(src.value) {
+		SharedPtr(const SharedPtr<T>& src):value(src.value),ref(src.ref) {
 			++(*ref);
 		}
 		void operator =(T* src) {

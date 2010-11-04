@@ -16,7 +16,7 @@ class FtpFileTextCtrl : public FileTextCtrlBase
 public:
 	FtpFileTextCtrl(wxWindow* parent);
 	~FtpFileTextCtrl();
-	bool open(SharedPtr<AsyncFtp>& ftp, wxString filename);
+	void open(SharedPtr<AsyncFtp>& ftp, wxString filename);
 	wxString getLabel();
 	virtual wxString getExtension();
 	bool saveFile();

@@ -2,7 +2,7 @@
 
 const wxEventType wxEVT_FTP = wxNewEventType();
 
-AsyncFtp::AsyncFtp():mMutex(new wxMutex),mFtp(new Ftp)
+AsyncFtp::AsyncFtp():mFtp(new Ftp),mMutex(new wxMutex)
 {
 }
 
@@ -12,7 +12,7 @@ AsyncFtp::~AsyncFtp()
 
 
 FtpThread::FtpThread(SharedPtr<Ftp> ftp, SharedPtr<wxMutex> mutex, wxEvtHandler* evtHandler)
-	:wxThread(),mFtp(ftp),mMutex(mutex),mEventHandler(evtHandler)
+	:wxThread(),mEventHandler(evtHandler),mFtp(ftp),mMutex(mutex)
 {
 	if(Create() != wxTHREAD_NO_ERROR) {
 		wxLogError(wxT("FtpThread::FtpThread"));

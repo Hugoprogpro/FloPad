@@ -50,7 +50,7 @@ bool Socket::sendData(const std::string& data)
 }
 
 
-bool Socket::setTimeout(int sec, int usec)
+void Socket::setTimeout(int sec, int usec)
 {
 	mSocket.SetTimeout(sec);
 }
@@ -83,7 +83,7 @@ bool Ftp::pasv()
 	std::string data;
 	mSocket.recvData(data);
 	if (data.find("227") == 0) {
-		int pos = data.find("(");
+		unsigned int pos = data.find("(");
 		int ip[6];
 		if (pos == std::string::npos)
 			return false;
@@ -142,7 +142,7 @@ bool Ftp::close()
 
 bool Ftp::getLine(std::string& line) {
 	if(mConnected) {
-		int pos = mResponse.find("\r\n");
+		unsigned int pos = mResponse.find("\r\n");
 		std::string tmp;
 		while(pos == std::string::npos) {
 			if(!mSocket.recvData(tmp))
@@ -256,7 +256,7 @@ bool Ftp::pwd(std::string& dirname)
 	if(mConnected) {
 		sendCommand("PWD\n");
 		if ((getResponse()/100)%10 == 2) {
-			int pos = mLastLine.find("\"");
+			unsigned int pos = mLastLine.find("\"");
 			if (pos == std::string::npos)
 				return false;
 			++pos;
@@ -350,8 +350,8 @@ bool Ftp::remove(const char* filename, bool isDir)
 Ftp::StringList Ftp::splitString(std::string str, std::string delim) const {
 	StringList list;
 	if(mConnected) {
-		int from = 0;
-		int to = 1;
+		unsigned int from = 0;
+		unsigned int to = 1;
 		int delimSize = delim.size();
 		while (to != std::string::npos) {
 			to = str.find(delim, from);

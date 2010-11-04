@@ -17,6 +17,7 @@ IMPLEMENT_APP(wxMiniApp);
 
 int wxMiniApp::OnExit() {
 	wxSocketBase::Shutdown();
+	return wxApp::OnExit();
 }
 
 bool wxMiniApp::OnInit()

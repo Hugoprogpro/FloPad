@@ -3,7 +3,7 @@ FloPad
 Multiplatform editor for PHP, HTML, CSS with FTP client
 
 dependencies:
-wxWidgets (tested with 2.8.10, ubuntu)
+wxWidgets (tested with 2.8.10, ubuntu), sqlite3
 
 Features:
 code snippets
@@ -13,3 +13,7 @@ v0.1:
 syntax highlight
 autocomplete
 FTP client
+
+How to compile:
+	in terminal-> make
+

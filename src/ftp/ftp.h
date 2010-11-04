@@ -20,7 +20,7 @@ public:
 	bool sendData(const std::string& data);
 	bool sendData(const char* data, size_t size);
 	bool recvData(std::string& data);
-	bool setTimeout(int sec, int usec);
+	void setTimeout(int sec, int usec);
 	bool isClosed();
 	void close();
 };
