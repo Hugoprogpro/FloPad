@@ -1,8 +1,8 @@
 #include <iostream>
 #include <wx/wx.h>
 #include <wx/stc/stc.h>
-#include "src/editor.h"
-#include "src/ftp/ftp.h"
+#include "editor.h"
+#include "ftp/ftp.h"
 
 
 
@@ -21,7 +21,7 @@ int wxMiniApp::OnExit() {
 
 bool wxMiniApp::OnInit()
 {
-	SetTopWindow( new FloEditor() );
+	SetTopWindow((wxWindow*) new FloEditor() );
     GetTopWindow()->Show();
 	wxSocketBase::Initialize();
     return true;
