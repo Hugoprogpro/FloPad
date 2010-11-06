@@ -15,8 +15,10 @@
 #include "asyncftp.h"
 #include "ftpfiletextctrl.h"
 #include "ftpdialogs.h"
+#include "ftptoolbar.h"
 
 
+class FtpToolbar;
 class FloEditor;
 
 class FtpCtrl : public wxPanel {
@@ -28,7 +30,8 @@ class FtpCtrl : public wxPanel {
 	};
 	FloEditor* mEditor;
 	SharedPtr<AsyncFtp> mFtp;
-	wxListView* mList;
+	FtpToolbar* mToolbar;
+	wxListView* mList;	
 	wxStatusBar* mStatusBar;
 	wxString mPwd;
 	ViewMode mViewMode;
@@ -38,7 +41,10 @@ class FtpCtrl : public wxPanel {
 	void onDClick(wxListEvent& event);
 	void onRightClick(wxListEvent& event);
 	void onMenuSelected(wxCommandEvent& event);
+	void onItemSelect(wxListEvent& event);
+	void onItemDeselect(wxListEvent& event);
 	void connect(wxString);
+	void initToolbar(wxSizer* sizer);
 	void initListCtrl(wxSizer* sizer);
 	public:
 		FtpCtrl(FloEditor* parent, SharedPtr<DbConnector> db);

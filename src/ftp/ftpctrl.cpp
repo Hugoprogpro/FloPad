@@ -9,12 +9,21 @@ FtpCtrl::FtpCtrl(FloEditor* parent, SharedPtr<DbConnector> db):wxPanel((wxWindow
 	Connect(wxEVT_COMMAND_LIST_ITEM_ACTIVATED, (wxObjectEventFunction)&FtpCtrl::onDClick);
 	Connect(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, (wxObjectEventFunction)&FtpCtrl::onRightClick);
 	Connect(wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&FtpCtrl::onMenuSelected);
+	Connect(wxEVT_COMMAND_LIST_ITEM_SELECTED, (wxObjectEventFunction)&FtpCtrl::onItemSelect);
+	Connect(wxEVT_COMMAND_LIST_ITEM_DESELECTED, (wxObjectEventFunction)&FtpCtrl::onItemDeselect);
 	wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
 	SetSizer(sizer);
+	initToolbar(sizer);	
 	initListCtrl(sizer);
 	mStatusBar = new wxStatusBar(this);
 	sizer->Add(mStatusBar, 0, wxGROW);
 	showAccounts();
+}
+
+void FtpCtrl::initToolbar(wxSizer* sizer) {
+	mToolbar = new FtpToolbar(this);
+	sizer->Add(mToolbar,0, wxGROW | wxEXPAND);
+	mToolbar->enableServerTools(false);
 }
 
 void FtpCtrl::initListCtrl(wxSizer* sizer) {
@@ -152,6 +161,27 @@ void FtpCtrl::onMenuSelected(wxCommandEvent& event) {
 	break;
 	}
 }
+
+void FtpCtrl::onItemSelect(wxListEvent& event) {
+	if(mViewMode != FTP_BUSY) {
+		if(mViewMode == FTP) {
+		}
+		else {
+			mToolbar->enableServerTools(true);
+		}
+	}
+}
+
+void FtpCtrl::onItemDeselect(wxListEvent& event) {
+	if(mViewMode != FTP_BUSY) {
+		if(mViewMode == FTP) {
+		}
+		else {
+			mToolbar->enableServerTools(false);
+		}
+	}
+}
+
 
 void FtpCtrl::onDClick(wxListEvent& event) {
 	if(mViewMode != FTP_BUSY) {
