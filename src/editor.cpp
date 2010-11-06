@@ -267,11 +267,10 @@ void FloEditor::createNewFile() {
 
 void FloEditor::onOpenFile(wxCommandEvent& WXUNUSED(event)) {
 	LocalFileTextCtrl* sc = new LocalFileTextCtrl(mNotebook);
-	if(sc->openFile()) {
-		addFileTextCtrl(sc);
+	addFileTextCtrl(sc);
+	if(!sc->openFile()) {
+		mNotebook->DeletePage(mNotebook->GetPageCount()-1);
 	}
-	else
-		mNotebook->RemoveChild(sc);
 }
 
 void FloEditor::onSave(wxCommandEvent& WXUNUSED(event))
