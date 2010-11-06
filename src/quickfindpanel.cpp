@@ -6,12 +6,12 @@ QuickFindPanel::QuickFindPanel(wxWindow* parent, FloEditor* editor):wxToolBar(pa
 	AddControl(new wxStaticText(this, wxID_ANY, wxT("find:")));
 	mSearchCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(150, -1), wxTE_PROCESS_ENTER);
 	AddControl(mSearchCtrl);
-	AddTool(wxID_FIND, wxT("search"), wxBitmap(wxT("data/find.gif")), wxT("search"), wxITEM_NORMAL);
+	AddTool(wxID_FIND, wxT("search"), wxBitmap(wxT("data/find.png")), wxT("search"), wxITEM_NORMAL);
 	
 	AddControl(new wxStaticText(this, wxID_ANY, wxT("replace with:")));
 	mReplaceCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(150, -1), wxTE_PROCESS_ENTER);
 	AddControl(mReplaceCtrl);
-	AddTool(wxID_REPLACE, wxT("replace"), wxBitmap(wxT("data/replace.gif")), wxT("replace"), wxITEM_NORMAL);
+	AddTool(wxID_REPLACE, wxT("replace"), wxBitmap(wxT("data/text_replace.png")), wxT("replace"), wxITEM_NORMAL);
 	
 	mRegExp = new wxCheckBox(this, wxID_ANY, wxT("regexp"), wxDefaultPosition, wxSize(80, -1));
 	AddControl(mRegExp);

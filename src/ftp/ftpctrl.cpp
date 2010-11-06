@@ -22,7 +22,7 @@ void FtpCtrl::initListCtrl(wxSizer* sizer) {
 	sizer->Add(mList, 1, wxGROW | wxEXPAND);
 	//mList->InsertColumn(0, wxT("Title"));
 	wxImageList* imagelist = new wxImageList(16, 16, true);
-	imagelist->Add(wxBitmap(wxT("data/folder.gif")));
+	imagelist->Add(wxBitmap(wxT("data/folder.png")));
 	mList->SetImageList(imagelist, wxIMAGE_LIST_SMALL);
 }
 
