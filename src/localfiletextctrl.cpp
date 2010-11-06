@@ -1,5 +1,7 @@
 #include "localfiletextctrl.h"
 
+wxString LocalFileTextCtrl::lastDir = wxT("");
+
 LocalFileTextCtrl::LocalFileTextCtrl(wxWindow* parent):FileTextCtrlBase(parent),mFilename(wxT(""))
 {	
 }
@@ -9,7 +11,7 @@ LocalFileTextCtrl::~LocalFileTextCtrl()
 }
 
 bool LocalFileTextCtrl::saveFileAs() {
-	wxFileDialog fd( this, _("Save file"), wxT(""), wxT(""), wxT("*.*"),  wxSAVE);
+	wxFileDialog fd( this, _("Save file"), lastDir, wxT(""), wxT("*.*"),  wxSAVE);
 	if ( fd.ShowModal() == wxID_OK ){
 		mFilename = fd.GetPath();
 		return saveFile();
@@ -18,9 +20,10 @@ bool LocalFileTextCtrl::saveFileAs() {
 }
 
 bool LocalFileTextCtrl::openFile() {
-	wxFileDialog fd( this, _("Open file"), wxT(""), wxT(""), wxT("*.*"),  wxOPEN);
+	wxFileDialog fd( this, _("Open file"), lastDir, wxT(""), wxT("*.*"),  wxOPEN);
 	if ( fd.ShowModal() == wxID_OK ){
 		mFilename = fd.GetPath();
+		lastDir = mFilename.GetPath();
 		return LoadFile(mFilename.GetFullPath());
 	}
 	return false;

@@ -8,6 +8,7 @@
 class LocalFileTextCtrl : public FileTextCtrlBase {
 	wxFileName mFilename;
 	virtual bool saveFileAs();
+	static wxString lastDir;
 	public:
 		LocalFileTextCtrl(wxWindow* parent);
 		virtual ~LocalFileTextCtrl();
